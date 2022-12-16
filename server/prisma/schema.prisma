@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  login    String @unique
+  email    String @unique
+  password String
+  name     String
+
+  points Point[]
+  Rental Rental[]
+}
+
+model Bike {
+  id        Int     @id @default(autoincrement())
+  serial    String  @unique @default(uuid())
+  size      String
+  available Boolean @default(true)
+
+  Point   Point?   @relation(fields: [pointId], references: [id])
+  pointId Int?
+  Rental  Rental[]
+}
+
+model Point {
+  id      Int    @id @default(autoincrement())
+  address String
+  ownerId Int?
+
+  bikes Bike[]
+  User  User?  @relation(fields: [ownerId], references: [id])
+}
+
+model Rental {
+  id        Int     @id @default(autoincrement())
+  bikeId    Int
+  userId    Int
+  startTime String
+  endTime   String?
+
+  Bike Bike @relation(fields: [bikeId], references: [id])
+  User User @relation(fields: [userId], references: [id])
+}
