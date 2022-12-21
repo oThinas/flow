@@ -18,11 +18,11 @@ model User {
   id       Int    @id @default(autoincrement())
   login    String @unique
   email    String @unique
-  password String
   name     String
+  password String
 
-  points Point[]
-  Rental Rental[]
+  Points  Point[]
+  Rentals Rental[]
 }
 
 model Bike {
@@ -33,7 +33,7 @@ model Bike {
 
   Point   Point?   @relation(fields: [pointId], references: [id])
   pointId Int?
-  Rental  Rental[]
+  Rentals Rental[]
 }
 
 model Point {
@@ -41,7 +41,7 @@ model Point {
   address String
   ownerId Int?
 
-  bikes Bike[]
+  Bikes Bike[]
   User  User?  @relation(fields: [ownerId], references: [id])
 }
 

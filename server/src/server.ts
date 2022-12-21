@@ -1,13 +1,16 @@
 import express from 'express';
+import { PrismaClient } from '@prisma/client';
+
+import { user } from './routes/user';
 
 const app = express();
-app.get('/thinas', (request, response) => {
-  return response.json([
-    { name: 'Thinas', age: 18 },
-    { name: 'Tais', age: 18 },
-    { name: 'Mel', age: 14 },
-    { name: 'Tapioca', age: 5 },
-  ]);
-});
+app.use(express.json());
+const prisma = new PrismaClient();
+
+/** User */
+user.getAll(app, prisma);
+user.getById(app, prisma);
+user.getByQuery(app, prisma);
+user.post(app, prisma);
 
 app.listen(3000);
