@@ -60,21 +60,22 @@ async function validatePost(
 ) {
   if (Object.keys(request.body).length !== ['name', 'login', 'email', 'password'].length) {
     return {
-      error: response.status(400).send('Nenhum parâmetro foi informado. Favor, informar "name", "login", "email" e "password".'),
+      error: response.status(400).send('Favor, informar "name", "login", "email" e "password".'),
       isPostValid: false,
     };
   }
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
   const userSchema = z.object({
-    name: z.string()
+    name: z.string().trim()
       .min(3, { message: 'Nome deve ter no mínimo 3 caracteres.' })
       .max(50, { message: 'Nome deve ter no máximo 50 caracteres.' }),
-    login: z.string()
+    login: z.string().trim()
       .min(4, { message: 'Login deve ter no mínimo 4 caracteres.' })
       .max(20, { message: 'Login deve ter no máximo 20 caracteres.' }),
-    email: z.string().email({ message: 'Email inválido.' }),
-    password: z.string()
+    email: z.string().trim()
+      .email({ message: 'Email inválido.' }),
+    password: z.string().trim()
       .regex(passwordRegex, { message: 'Senha deve conter no mínimo 6 caracteres, pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.' }),
   });
 
