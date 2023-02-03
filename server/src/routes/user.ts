@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
+
 import { schemaParser } from '../utils/schemaParser';
 
 /**
@@ -32,12 +33,11 @@ function getAll(app: express.Application, prisma: PrismaClient): void {
  * @param {express.Application} app - Express application instance.
  * @param {PrismaClient} prisma - Prisma client instance.
 
- * @description It takes the ```id``` from the request parameters, verify if it is a number.
- * If not, it sends and error message with a status code 404 and message **'O parâmetro da
- * requisição (id) deve ser um número.'**. If ```id``` is a numeric string, it tries to find
- * a user with that id using the Prisma client. If it finds one, it sends the user object in
- * the response, otherwise it sends an error message with a status code of 404 and message
- * **'Nenhum usuário cadastrado.'**.
+ * @description It takes the ```id``` from the request parameters and verify if it is a number.
+ * If not, it sends a 400 status code with the message **'O parâmetro darequisição (id) deve ser
+ * um número.'**. If ```id``` is a numeric string, it tries to find a user with that id using the
+ * Prisma client. If it finds one, it sends the user object in the response, otherwise it sends a
+ * 400 status code with the message **'Nenhum usuário cadastrado.'**.
  */
 function getById(app: express.Application, prisma: PrismaClient): void {
   app.get('/user/:id', async (request, response) => {
@@ -62,10 +62,9 @@ function getById(app: express.Application, prisma: PrismaClient): void {
 
  * @description It takes the id from the request parameters and tries to find a user with that
  * id using the Prisma client. If it finds, it sends the user object in the response, otherwise
- * it sends an error message with a status code of 404 status code with the message **'Nenhum
- * usuário cadastrado.'**. If no query is provided, it sends an error message with a status code
- * of 400 status code with the message **'Nenhum parâmetro válido foi informado. Favor, informar
- * "name", "login" ou "email".'**
+ * it sends a 400 status code with the message **'Nenhum usuário cadastrado.'**. If no query is
+ * provided, it sends a 400 status code with the message **'Nenhum parâmetro válido foi informado.
+ * Favor, informar "name", "login" ou "email".'**
  */
 function getByQuery(app: express.Application, prisma: PrismaClient): void {
   app.get('/user', async (request, response) => {
